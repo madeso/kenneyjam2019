@@ -4,7 +4,7 @@ extends Sprite
 # var a = 2
 # var b = "text"
 
-const SPEED = 55
+var speed = rand_range(30, 60)
 const RANGE = 25
 const RSQ = RANGE * RANGE
 
@@ -12,6 +12,11 @@ var was_visible = false
 
 var gameplay = null
 var movement = 1
+
+var pos = Vector2(0,0)
+const SWIM_DELTA = PI/2
+const SWIM_RANGE = 10
+var swim_timer = randf() * PI
 
 var fishes = [
 	preload("res://assets/sprites/fish01.png"),
@@ -37,10 +42,12 @@ func _process(delta):
 		was_visible = true
 	if not is_visible and was_visible:
 		# moved outside...
-		print('fished moved outside')
 		self.queue_free()
 	
-	self.position += Vector2(delta * SPEED * movement, 0)
+	self.pos += Vector2(delta * speed * movement, 0)
+	self.swim_timer += delta * SWIM_DELTA
+	self.position = pos + Vector2(0, sin(swim_timer) * SWIM_RANGE)
+	
 	if gameplay.check_pos:
 		var l = (self.position - gameplay.gun_position).length_squared()
 		if l < RSQ:

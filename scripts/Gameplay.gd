@@ -34,7 +34,7 @@ func spawn_fish(start):
 		f.movement = -1
 		if not start:
 			x = get_viewport().size.x + WIDTH
-	f.position = Vector2(x, rand_range(0, get_viewport().size.y-HEIGHT * 2) + HEIGHT)
+	f.pos = Vector2(x, rand_range(0, get_viewport().size.y-HEIGHT * 2) + HEIGHT)
 	f.gameplay = self
 	fishes.add_child(f)
 
