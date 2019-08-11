@@ -7,6 +7,7 @@ extends Node
 var crosshair = load("res://assets/sprites/crosshair.png")
 var loading = load("res://assets/sprites/crosshair-loading.png")
 var bubbles = preload("res://bubbles.tscn")
+onready var gameplay = $"../Gameplay"
 
 var md = false
 
@@ -21,8 +22,10 @@ func _ready():
 func _process(delta):
 	var hold = Input.is_mouse_button_pressed(BUTTON_LEFT)
 	if hold and not md:
+		# todo: Gustav: play sound
 		var b = bubbles.instance()
 		b.position = get_viewport().get_mouse_position()
+		gameplay.fire_gun(b.position)
 		get_tree().get_root().add_child(b)
 		md = true
 	if not hold:
