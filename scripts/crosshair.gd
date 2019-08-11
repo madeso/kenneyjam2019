@@ -6,6 +6,9 @@ extends Node
 
 var crosshair = load("res://assets/sprites/crosshair.png")
 var loading = load("res://assets/sprites/crosshair-loading.png")
+var bubbles = preload("res://bubbles.tscn")
+
+var md = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,5 +19,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if Input.is_mouse_button_pressed(BUTTON_LEFT):
-		pass
+	var hold = Input.is_mouse_button_pressed(BUTTON_LEFT)
+	if hold and not md:
+		var b = bubbles.instance()
+		b.position = get_viewport().get_mouse_position()
+		get_tree().get_root().add_child(b)
+		md = true
+	if not hold:
+		md = false
