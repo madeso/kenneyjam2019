@@ -17,6 +17,9 @@ var pos = Vector2(0,0)
 const SWIM_DELTA = PI/2
 const SWIM_RANGE = 10
 var swim_timer = randf() * PI
+var type = 0
+
+var skeleton = preload("res://skeleton.tscn")
 
 var fishes = [
 	preload("res://assets/sprites/fish01.png"),
@@ -25,10 +28,15 @@ var fishes = [
 	preload("res://assets/sprites/fish04.png"),
 	preload("res://assets/sprites/fish05.png")
 	]
+var skeletons = [
+	preload("res://assets/sprites/skeleton03.png"),
+	preload("res://assets/sprites/skeleton04.png"),
+	preload("res://assets/sprites/skeleton05.png"),
+	]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var type = randi() % 5
+	type = randi() % 5
 	self.texture = fishes[type]
 	self.flip_h = movement < 0
 	# self.set_texture(fishes[type])
@@ -51,6 +59,10 @@ func _process(delta):
 	if gameplay.check_pos:
 		var l = (self.position - gameplay.gun_position).length_squared()
 		if l < RSQ:
-			# todo(Gustav): Spawn skeleton
-			print('fished killed')
+			var s = skeleton.instance()
+			if type > 1:
+				s.texture = skeletons[type-2]
+			s.position = self.position
+			s.flip_h = self.flip_h
+			get_tree().get_root().add_child(s)
 			self.queue_free()

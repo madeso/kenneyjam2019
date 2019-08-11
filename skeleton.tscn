@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/sprites/skeleton-base.png" type="Texture" id=1]
+[ext_resource path="res://scripts/skeleton.gd" type="Script" id=2]
+
+[node name="skeleton" type="Sprite"]
+position = Vector2( 434, 342 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
