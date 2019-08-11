@@ -4,10 +4,14 @@ extends Sprite
 # var a = 2
 # var b = "text"
 
+const SPEED = 55
 const RANGE = 25
 const RSQ = RANGE * RANGE
 
+var was_visible = false
+
 var gameplay = null
+var movement = 1
 
 var fishes = [
 	preload("res://assets/sprites/fish01.png"),
@@ -21,12 +25,25 @@ var fishes = [
 func _ready():
 	var type = randi() % 5
 	self.texture = fishes[type]
+	self.flip_h = movement < 0
 	# self.set_texture(fishes[type])
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	var r = self.get_rect()
+	r.position += self.position
+	var is_visible = r.intersects(get_viewport().get_visible_rect())
+	if is_visible:
+		was_visible = true
+	if not is_visible and was_visible:
+		# moved outside...
+		print('fished moved outside')
+		self.queue_free()
+	
+	self.position += Vector2(delta * SPEED * movement, 0)
 	if gameplay.check_pos:
 		var l = (self.position - gameplay.gun_position).length_squared()
 		if l < RSQ:
 			# todo(Gustav): Spawn skeleton
+			print('fished killed')
 			self.queue_free()
